@@ -11,26 +11,23 @@ namespace ConsoleApp2
 {
     public static class Logic
     {
-        public static offers getBooks(string path = @"c:\Storage\3.xml")
+        public static offers getBooks(string path = @"c:\Storage\1.xml")
         {
 
             var reader = new StreamReader(path);
-            var tempReader = new StreamReader(path);
-
             var doc = XElement.Parse(reader.ReadToEnd()).Element("shop").Element("offers");
+            var readerNew = new MemoryStream(Encoding.UTF8.GetBytes(doc.ToString()));
+
             var serializer = new XmlSerializer(typeof(offers));
 
-            var readerNew = new MemoryStream(Encoding.UTF8.GetBytes(doc.ToString()));
-            var result = (offers)serializer.Deserialize(readerNew);
-
-            return result;
+            return (offers)serializer.Deserialize(readerNew);
         }
 
 
 
         public static IEnumerable<Book> convertOffersToBooks(offers offers)
         {
-
+            var authors = offers.offer.Select(x => x.author).Distinct();
             var result = offers.offer.Select(x =>
             {
                 return new Book
@@ -45,17 +42,17 @@ namespace ConsoleApp2
                     pickup = x.pickup,
                     delivery = x.delivery,
                     local_delivery_cost = x.local_delivery_cost,
-                    author = x.author,
+                    author =authors.FirstOrDefault(t=>t==x.author)|| new Author { name = x.author },
                     name = x.name,
-                    publisher = x.publisher,
-                    series = x.series,
+                    publisher = new Publisher { name = x.publisher },
+                    series = new Series { name = x.series },
                     year = x.year,
                     iSBN = x.ISBN,
-                    language = x.language,
+                    language = new Language { name = x.language },
                     binding = x.binding,
                     page_extent = x.page_extent,
                     description = x.description,
-                    sales_notes = x.sales_notes,
+                    sales_notes = new Sales_note { name = x.sales_notes },
                     manufacturer_warranty = x.manufacturer_warranty,
                     barcode = x.barcode,
                     weight = x.weight,
@@ -63,7 +60,7 @@ namespace ConsoleApp2
                     available = x.available,
                     type = x.type,
                     group_id = (int)x.group_id,
-                    @params = new List<Param>(x.param.Select(t => new Param { paramName = t.name, paramUnit = t.unit, paramValue = t.Value }))
+                    _params = new List<Param>(x.param.Select(t => new Param { paramName = t.name, paramUnit = t.unit, paramValue = t.Value }))
                 };
             });
             return result;
