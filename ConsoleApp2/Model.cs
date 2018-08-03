@@ -20,65 +20,65 @@ namespace ConsoleApp2
     public class Book
     {
         [Key]
-        public int idField { get; set; }
+        public int id { get; set; }
 
-        public string urlField { get; set; }
+        public string url { get; set; }
 
-        public double priceField { get; set; }
+        public double price { get; set; }
 
-        public double oldpriceField { get; set; }
+        public double oldprice { get; set; }
 
-        public string currencyIdField { get; set; }
+        public string currencyId { get; set; }
 
-        public int categoryIdField { get; set; }
+        public int categoryId { get; set; }
 
-        public ICollection<Picture> pictureField { get; set; } = new List<Picture>();
+        public ICollection<Picture> picture { get; set; } = new List<Picture>();
 
-        public bool storeField { get; set; }
+        public bool store { get; set; }
 
-        public bool pickupField { get; set; }
+        public bool pickup { get; set; }
 
-        public bool deliveryField { get; set; }
+        public bool delivery { get; set; }
 
-        public uint local_delivery_costField { get; set; }
+        public uint local_delivery_cost { get; set; }
 
-        public string authorField { get; set; }
+        public string author { get; set; }
 
-        public string nameField { get; set; }
+        public string name { get; set; }
 
-        public string publisherField { get; set; }
+        public string publisher { get; set; }
 
-        public string seriesField { get; set; }
+        public string series { get; set; }
 
-        public string yearField { get; set; }
+        public string year { get; set; }
 
-        public string iSBNField { get; set; }
+        public string iSBN { get; set; }
 
-        public string languageField { get; set; }
+        public string language { get; set; }
 
-        public string bindingField { get; set; }
+        public string binding { get; set; }
 
-        public string page_extentField { get; set; }
+        public string page_extent { get; set; }
 
-        public string descriptionField { get; set; }
+        public string description { get; set; }
 
-        public string sales_notesField { get; set; }
+        public string sales_notes { get; set; }
 
-        public bool manufacturer_warrantyField { get; set; }
+        public bool manufacturer_warranty { get; set; }
 
-        public ulong barcodeField { get; set; }
+        public ulong barcode { get; set; }
 
-        public decimal weightField { get; set; }
+        public decimal weight { get; set; }
 
-        public string dimensionsField { get; set; }
+        public string dimensions { get; set; }
 
-        public bool availableField { get; set; }
+        public bool available { get; set; }
 
-        public string typeField { get; set; }
+        public string type { get; set; }
 
-        public int group_idField { get; set; }
+        public int group_id { get; set; }
 
-        public ICollection<Param> paramsField { get; set; }
+        public ICollection<Param> _params { get; set; }
     }
 
     public class Param
