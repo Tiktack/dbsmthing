@@ -98,4 +98,34 @@ namespace ConsoleApp2
 
         public string pictureUrl { get; set; }
     }
+    public class Author
+    {
+        public int Id { get; set; }
+
+        public string name { get; set; }
+    }
+    public class Language
+    {
+        public int Id { get; set; }
+
+        public string name { get; set; }
+    }
+    public class Sales_notes
+    {
+        public int Id { get; set; }
+
+        public string name { get; set; }
+    }
+    public class Publisher
+    {
+        public int Id { get; set; }
+
+        public string name { get; set; }
+    }
+    public class Series
+    {
+        public int Id { get; set; }
+
+        public string name { get; set; }
+    }
 }
