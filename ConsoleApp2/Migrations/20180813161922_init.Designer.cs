@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleApp2.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20180813132908_init")]
+    [Migration("20180813161922_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +40,6 @@ namespace ConsoleApp2.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AuthorId");
 
                     b.Property<bool>("available");
 
@@ -106,8 +104,6 @@ namespace ConsoleApp2.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("AuthorId");
-
                     b.HasIndex("languageId");
 
                     b.HasIndex("publisherId");
@@ -117,6 +113,19 @@ namespace ConsoleApp2.Migrations
                     b.HasIndex("seriesId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("ConsoleApp2.BookAuthor", b =>
+                {
+                    b.Property<int>("BookId");
+
+                    b.Property<int>("AuthorId");
+
+                    b.HasKey("BookId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("BookAuthor");
                 });
 
             modelBuilder.Entity("ConsoleApp2.Language", b =>
@@ -218,10 +227,6 @@ namespace ConsoleApp2.Migrations
 
             modelBuilder.Entity("ConsoleApp2.Book", b =>
                 {
-                    b.HasOne("ConsoleApp2.Author", "Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId");
-
                     b.HasOne("ConsoleApp2.Language", "language")
                         .WithMany("Books")
                         .HasForeignKey("languageId");
@@ -237,6 +242,19 @@ namespace ConsoleApp2.Migrations
                     b.HasOne("ConsoleApp2.Series", "series")
                         .WithMany("Books")
                         .HasForeignKey("seriesId");
+                });
+
+            modelBuilder.Entity("ConsoleApp2.BookAuthor", b =>
+                {
+                    b.HasOne("ConsoleApp2.Author", "Author")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ConsoleApp2.Book", "Book")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ConsoleApp2.Param", b =>

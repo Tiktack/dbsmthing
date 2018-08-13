@@ -87,7 +87,6 @@ namespace ConsoleApp2.Migrations
                     pickup = table.Column<bool>(nullable: false),
                     delivery = table.Column<bool>(nullable: false),
                     local_delivery_cost = table.Column<long>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: true),
                     name = table.Column<string>(nullable: true),
                     publisherId = table.Column<int>(nullable: true),
                     seriesId = table.Column<int>(nullable: true),
@@ -109,12 +108,6 @@ namespace ConsoleApp2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Languages_languageId",
                         column: x => x.languageId,
@@ -139,6 +132,30 @@ namespace ConsoleApp2.Migrations
                         principalTable: "Series",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookAuthor",
+                columns: table => new
+                {
+                    AuthorId = table.Column<int>(nullable: false),
+                    BookId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookAuthor", x => new { x.BookId, x.AuthorId });
+                    table.ForeignKey(
+                        name: "FK_BookAuthor_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookAuthor_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,8 +201,8 @@ namespace ConsoleApp2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_BookAuthor_AuthorId",
+                table: "BookAuthor",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
@@ -222,16 +239,19 @@ namespace ConsoleApp2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BookAuthor");
+
+            migrationBuilder.DropTable(
                 name: "Params");
 
             migrationBuilder.DropTable(
                 name: "Pictures");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Languages");
