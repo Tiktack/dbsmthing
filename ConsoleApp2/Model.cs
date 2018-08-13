@@ -50,23 +50,19 @@ namespace ConsoleApp2
 
         public int AuthorId { get; set; }
 
-        //public Author Author { get; set; }
-
         //[MaxLength(100)]
         public string name { get; set; }
 
         public int publisherId { get; set; }
-        //public Publisher publisher { get; set; }
 
         public int seriesId { get; set; }
-       // public Series series { get; set; }
+
         // [MaxLength(50)]
         public string year { get; set; }
         //[MaxLength(100)]
         public string iSBN { get; set; }
 
         public int languageId { get; set; }
-        // public Language language { get; set; }
 
         //[MaxLength(70)]
         public string binding { get; set; }
@@ -76,7 +72,6 @@ namespace ConsoleApp2
         public string description { get; set; }
 
         public int sales_notesId { get; set; }
-        //public Sales_note sales_notes { get; set; }
 
         public bool manufacturer_warranty { get; set; }
 
@@ -116,30 +111,36 @@ namespace ConsoleApp2
         public int Id { get; set; }
         // [MaxLength(200)]
         public string name { get; set; }
+        public List<Book> Books { get; set; }
     }
     public class Language : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(100)]
         public string name { get; set; }
+        public List<Book> Books { get; set; }
     }
     public class Sales_note : IDictionaries
     {
         public int Id { get; set; }
         // [MaxLength(500)]
         public string name { get; set; }
+        public List<Book> Books { get; set; }
     }
     public class Publisher : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(200)]
         public string name { get; set; }
+        public List<Book> Books { get; set; }
     }
     public class Series : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(200)]
         public string name { get; set; }
+        public List<Book> Books { get; set; }
+
     }
     public interface IDictionaries
     {

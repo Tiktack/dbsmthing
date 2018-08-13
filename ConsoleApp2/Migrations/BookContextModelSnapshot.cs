@@ -40,6 +40,8 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<int>("AuthorId");
 
+                    b.Property<int?>("Sales_noteId");
+
                     b.Property<bool>("available");
 
                     b.Property<decimal>("barcode")
@@ -62,7 +64,7 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<string>("iSBN");
 
-                    b.Property<int?>("languageId");
+                    b.Property<int>("languageId");
 
                     b.Property<long>("local_delivery_cost");
 
@@ -78,11 +80,11 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<double>("price");
 
-                    b.Property<int?>("publisherId");
+                    b.Property<int>("publisherId");
 
-                    b.Property<int?>("sales_notesId");
+                    b.Property<int>("sales_notesId");
 
-                    b.Property<int?>("seriesId");
+                    b.Property<int>("seriesId");
 
                     b.Property<bool>("store");
 
@@ -97,11 +99,13 @@ namespace ConsoleApp2.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("Sales_noteId");
+
                     b.HasIndex("languageId");
 
                     b.HasIndex("publisherId");
-
-                    b.HasIndex("sales_notesId");
 
                     b.HasIndex("seriesId");
 
@@ -200,21 +204,29 @@ namespace ConsoleApp2.Migrations
 
             modelBuilder.Entity("ConsoleApp2.Book", b =>
                 {
-                    b.HasOne("ConsoleApp2.Language", "language")
-                        .WithMany()
-                        .HasForeignKey("languageId");
+                    b.HasOne("ConsoleApp2.Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ConsoleApp2.Publisher", "publisher")
-                        .WithMany()
-                        .HasForeignKey("publisherId");
+                    b.HasOne("ConsoleApp2.Sales_note")
+                        .WithMany("Books")
+                        .HasForeignKey("Sales_noteId");
 
-                    b.HasOne("ConsoleApp2.Sales_note", "sales_notes")
-                        .WithMany()
-                        .HasForeignKey("sales_notesId");
+                    b.HasOne("ConsoleApp2.Language")
+                        .WithMany("Books")
+                        .HasForeignKey("languageId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ConsoleApp2.Series", "series")
-                        .WithMany()
-                        .HasForeignKey("seriesId");
+                    b.HasOne("ConsoleApp2.Publisher")
+                        .WithMany("Books")
+                        .HasForeignKey("publisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ConsoleApp2.Series")
+                        .WithMany("Books")
+                        .HasForeignKey("seriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ConsoleApp2.Param", b =>

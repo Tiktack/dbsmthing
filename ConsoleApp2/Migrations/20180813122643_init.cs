@@ -89,50 +89,57 @@ namespace ConsoleApp2.Migrations
                     local_delivery_cost = table.Column<long>(nullable: false),
                     AuthorId = table.Column<int>(nullable: false),
                     name = table.Column<string>(nullable: true),
-                    publisherId = table.Column<int>(nullable: true),
-                    seriesId = table.Column<int>(nullable: true),
+                    publisherId = table.Column<int>(nullable: false),
+                    seriesId = table.Column<int>(nullable: false),
                     year = table.Column<string>(nullable: true),
                     iSBN = table.Column<string>(nullable: true),
-                    languageId = table.Column<int>(nullable: true),
+                    languageId = table.Column<int>(nullable: false),
                     binding = table.Column<string>(nullable: true),
                     page_extent = table.Column<string>(nullable: true),
                     description = table.Column<string>(nullable: true),
-                    sales_notesId = table.Column<int>(nullable: true),
+                    sales_notesId = table.Column<int>(nullable: false),
                     manufacturer_warranty = table.Column<bool>(nullable: false),
                     barcode = table.Column<decimal>(nullable: false),
                     weight = table.Column<decimal>(nullable: false),
                     dimensions = table.Column<string>(maxLength: 70, nullable: true),
                     available = table.Column<bool>(nullable: false),
                     type = table.Column<string>(maxLength: 70, nullable: true),
-                    group_id = table.Column<int>(nullable: false)
+                    group_id = table.Column<int>(nullable: false),
+                    Sales_noteId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.id);
                     table.ForeignKey(
+                        name: "FK_Books_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Books_Sales_Notes_Sales_noteId",
+                        column: x => x.Sales_noteId,
+                        principalTable: "Sales_Notes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Books_Languages_languageId",
                         column: x => x.languageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Publishers_publisherId",
                         column: x => x.publisherId,
                         principalTable: "Publishers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Books_Sales_Notes_sales_notesId",
-                        column: x => x.sales_notesId,
-                        principalTable: "Sales_Notes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Series_seriesId",
                         column: x => x.seriesId,
                         principalTable: "Series",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,6 +185,16 @@ namespace ConsoleApp2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_AuthorId",
+                table: "Books",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_Sales_noteId",
+                table: "Books",
+                column: "Sales_noteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_languageId",
                 table: "Books",
                 column: "languageId");
@@ -186,11 +203,6 @@ namespace ConsoleApp2.Migrations
                 name: "IX_Books_publisherId",
                 table: "Books",
                 column: "publisherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_sales_notesId",
-                table: "Books",
-                column: "sales_notesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_seriesId",
@@ -211,9 +223,6 @@ namespace ConsoleApp2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Authors");
-
-            migrationBuilder.DropTable(
                 name: "Params");
 
             migrationBuilder.DropTable(
@@ -223,13 +232,16 @@ namespace ConsoleApp2.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Sales_Notes");
+
+            migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "Publishers");
-
-            migrationBuilder.DropTable(
-                name: "Sales_Notes");
 
             migrationBuilder.DropTable(
                 name: "Series");
