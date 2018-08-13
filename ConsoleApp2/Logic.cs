@@ -28,7 +28,8 @@ namespace ConsoleApp2
         //}
         public static IEnumerable<Author> GetAuthors(offers offers)
         {
-            return offers.offer.Select(x => x.author).Distinct().Select(x => new Author { name = x });
+            var lol = offers.offer.Select(x => x.author).Distinct().Select(x => new Author { name = x });
+            return lol.SelectMany(x => x.name.Split(',')).Select(x => new Author { name = x });
         }
         public static IEnumerable<Language> GetLanguages(offers offers)
         {
@@ -49,7 +50,7 @@ namespace ConsoleApp2
 
         public static IEnumerable<Book> ConvertOffersToBooks(offers offers, BookContext context)
         {
-
+            const char cos = ',';
             var result = offers.offer.Select(x =>
             {
                 return new Book
@@ -64,7 +65,8 @@ namespace ConsoleApp2
                     pickup = x.pickup,
                     delivery = x.delivery,
                     local_delivery_cost = x.local_delivery_cost,
-                    Author = context.Authors.FirstOrDefault(t => t.name == x.author),
+                    //Author = context.Authors.FirstOrDefault(t => t.name == x.author),
+                    BookAuthors = context.Authors.Where(t=>x.author.Split(cos).Any(y=>y==t.name)).Select(t => new BookAuthor { Author = t }).ToList(),
                     name = x.name,
                     publisher = context.Publishers.FirstOrDefault(t => t.name == x.publisher),
                     series = context.Series.FirstOrDefault(t => t.name == x.series),

@@ -21,6 +21,11 @@ namespace ConsoleApp2
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MyDb;Trusted_Connection=True;");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BookAuthor>()
+                .HasKey(t => new { t.BookId, t.AuthorId });
+        }
     }
 
     public class Book
@@ -37,7 +42,7 @@ namespace ConsoleApp2
         public string currencyId { get; set; }
 
         public int categoryId { get; set; }
-        
+
         public ICollection<Picture> picture { get; set; } = new List<Picture>();
 
         public bool store { get; set; }
@@ -48,7 +53,9 @@ namespace ConsoleApp2
 
         public uint local_delivery_cost { get; set; }
 
-        public Author Author { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; }
+
+        //public Author Author { get; set; }
 
         public string name { get; set; }
 
@@ -94,7 +101,7 @@ namespace ConsoleApp2
         public int Id { get; set; }
         [MaxLength(50)]
         public string paramName { get; set; }
-         [MaxLength(10)]
+        [MaxLength(10)]
         public string paramUnit { get; set; }
         public string paramValue { get; set; }
     }
@@ -108,39 +115,50 @@ namespace ConsoleApp2
     public class Author : IDictionaries
     {
         public int Id { get; set; }
-         [MaxLength(500)]
+        [MaxLength(500)]
         public string name { get; set; }
-        public List<Book> Books { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; }
     }
     public class Language : IDictionaries
     {
         public int Id { get; set; }
         [MaxLength(20)]
         public string name { get; set; }
-        public List<Book> Books { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
     public class Sales_note : IDictionaries
     {
         public int Id { get; set; }
         [MaxLength(300)]
         public string name { get; set; }
-        public List<Book> Books { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
     public class Publisher : IDictionaries
     {
         public int Id { get; set; }
-       [MaxLength(200)]
+        [MaxLength(200)]
         public string name { get; set; }
-        public List<Book> Books { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
     public class Series : IDictionaries
     {
         public int Id { get; set; }
         [MaxLength(200)]
         public string name { get; set; }
-        public List<Book> Books { get; set; }
+        public ICollection<Book> Books { get; set; }
 
     }
+
+    public class BookAuthor
+    {
+        public int AuthorId { get; set; }
+        public Author Author { get; set; }
+
+        public int BookId { get; set; }
+        public Book Book { get; set; }
+    }
+
+
     public interface IDictionaries
     {
         int Id { get; set; }
