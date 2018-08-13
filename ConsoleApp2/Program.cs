@@ -11,21 +11,27 @@ namespace ConsoleApp2
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            
-            var getbooks = Logic.getBooks();
-            var converted = Logic.convertOffersToBooks(getbooks);
-            getbooks = null;
             using (BookContext context = new BookContext())
             {
-                foreach (var item in converted)
-                {
+                //get all books
+                var getbooks = Logic.getBooks();
 
-                    context.Add(item);
-                }
+                context.AddRange(Logic.GetAuthors(getbooks));
+                context.AddRange(Logic.GetLanguages(getbooks));
+                context.AddRange(Logic.GetSales_note(getbooks));
+                context.AddRange(Logic.GetPublishers(getbooks));
+                context.AddRange(Logic.GetSeries(getbooks));
+                //save dictionaries to db
+                context.SaveChanges();
+                //create books for context
+                var converted = Logic.ConvertOffersToBooks(getbooks, context);
+                getbooks = null;
+                context.AddRange(converted);
+                //save books to db
                 context.SaveChanges();
             }
             stopWatch.Stop();
-            Debug.WriteLine(stopWatch.ElapsedMilliseconds); 
+            Debug.WriteLine(stopWatch.ElapsedMilliseconds);
         }
     }
 

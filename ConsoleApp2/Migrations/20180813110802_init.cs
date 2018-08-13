@@ -87,7 +87,7 @@ namespace ConsoleApp2.Migrations
                     pickup = table.Column<bool>(nullable: false),
                     delivery = table.Column<bool>(nullable: false),
                     local_delivery_cost = table.Column<long>(nullable: false),
-                    authorId = table.Column<int>(nullable: true),
+                    AuthorId = table.Column<int>(nullable: false),
                     name = table.Column<string>(nullable: true),
                     publisherId = table.Column<int>(nullable: true),
                     seriesId = table.Column<int>(nullable: true),
@@ -109,12 +109,6 @@ namespace ConsoleApp2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Books_Authors_authorId",
-                        column: x => x.authorId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Languages_languageId",
                         column: x => x.languageId,
@@ -184,11 +178,6 @@ namespace ConsoleApp2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_authorId",
-                table: "Books",
-                column: "authorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_languageId",
                 table: "Books",
                 column: "languageId");
@@ -222,6 +211,9 @@ namespace ConsoleApp2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
                 name: "Params");
 
             migrationBuilder.DropTable(
@@ -229,9 +221,6 @@ namespace ConsoleApp2.Migrations
 
             migrationBuilder.DropTable(
                 name: "Books");
-
-            migrationBuilder.DropTable(
-                name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Languages");

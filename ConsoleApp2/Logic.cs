@@ -22,12 +22,34 @@ namespace ConsoleApp2
 
             return (offers)serializer.Deserialize(readerNew);
         }
-
-
-
-        public static IEnumerable<Book> convertOffersToBooks(offers offers)
+        //public static IEnumerable<T> getSmthing<T>(offers offers) where T : IDictionaries, new()
+        //{
+        //    return offers.offer.Select(x => x.author).Distinct().Select(x => new T { name = x });
+        //}
+        public static IEnumerable<Author> GetAuthors(offers offers)
         {
-            var authors = offers.offer.Select(x => x.author).Distinct();
+            return offers.offer.Select(x => x.author).Distinct().Select(x => new Author { name = x });
+        }
+        public static IEnumerable<Language> GetLanguages(offers offers)
+        {
+            return offers.offer.Select(x => x.language).Distinct().Select(x => new Language { name = x });
+        }
+        public static IEnumerable<Sales_note> GetSales_note(offers offers)
+        {
+            return offers.offer.Select(x => x.sales_notes).Distinct().Select(x => new Sales_note { name = x });
+        }
+        public static IEnumerable<Publisher> GetPublishers(offers offers)
+        {
+            return offers.offer.Select(x => x.publisher).Distinct().Select(x => new Publisher { name = x });
+        }
+        public static IEnumerable<Series> GetSeries(offers offers)
+        {
+            return offers.offer.Select(x => x.series).Distinct().Select(x => new Series { name = x });
+        }
+
+        public static IEnumerable<Book> ConvertOffersToBooks(offers offers, BookContext context)
+        {
+
             var result = offers.offer.Select(x =>
             {
                 return new Book
@@ -42,17 +64,17 @@ namespace ConsoleApp2
                     pickup = x.pickup,
                     delivery = x.delivery,
                     local_delivery_cost = x.local_delivery_cost,
-                    author =authors.FirstOrDefault(t=>t==x.author)|| new Author { name = x.author },
+                    AuthorId = context.Authors.FirstOrDefault(t => t.name == x.author).Id,
                     name = x.name,
-                    publisher = new Publisher { name = x.publisher },
-                    series = new Series { name = x.series },
+                    publisherId = context.Publishers.FirstOrDefault(t => t.name == x.publisher).Id,
+                    seriesId = context.Series.FirstOrDefault(t => t.name == x.series).Id,
                     year = x.year,
                     iSBN = x.ISBN,
-                    language = new Language { name = x.language },
+                    languageId = context.Languages.FirstOrDefault(t => t.name == x.language).Id,
                     binding = x.binding,
                     page_extent = x.page_extent,
                     description = x.description,
-                    sales_notes = new Sales_note { name = x.sales_notes },
+                    sales_notesId = context.Sales_Notes.FirstOrDefault(t => t.name == x.sales_notes).Id,
                     manufacturer_warranty = x.manufacturer_warranty,
                     barcode = x.barcode,
                     weight = x.weight,

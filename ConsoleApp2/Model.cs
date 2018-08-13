@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ConsoleApp2
@@ -32,7 +33,7 @@ namespace ConsoleApp2
         public double price { get; set; }
 
         public double oldprice { get; set; }
-       // [MaxLength(50)]
+        // [MaxLength(50)]
         public string currencyId { get; set; }
 
         public int categoryId { get; set; }
@@ -47,27 +48,35 @@ namespace ConsoleApp2
 
         public uint local_delivery_cost { get; set; }
 
-        public int author { get; set; }
+        public int AuthorId { get; set; }
+
+        //public Author Author { get; set; }
+
         //[MaxLength(100)]
         public string name { get; set; }
 
-        public Publisher publisher { get; set; }
+        public int publisherId { get; set; }
+        //public Publisher publisher { get; set; }
 
-        public Series series { get; set; }
-       // [MaxLength(50)]
+        public int seriesId { get; set; }
+       // public Series series { get; set; }
+        // [MaxLength(50)]
         public string year { get; set; }
         //[MaxLength(100)]
         public string iSBN { get; set; }
 
-        public Language language { get; set; }
+        public int languageId { get; set; }
+        // public Language language { get; set; }
+
         //[MaxLength(70)]
         public string binding { get; set; }
-       // [MaxLength(70)]
+        // [MaxLength(70)]
         public string page_extent { get; set; }
 
         public string description { get; set; }
 
-        public Sales_note sales_notes { get; set; }
+        public int sales_notesId { get; set; }
+        //public Sales_note sales_notes { get; set; }
 
         public bool manufacturer_warranty { get; set; }
 
@@ -91,7 +100,7 @@ namespace ConsoleApp2
         public int Id { get; set; }
         //[MaxLength(100)]
         public string paramName { get; set; }
-       // [MaxLength(50)]
+        // [MaxLength(50)]
         public string paramUnit { get; set; }
         public string paramValue { get; set; }
     }
@@ -102,34 +111,39 @@ namespace ConsoleApp2
         //[MaxLength(500)]
         public string pictureUrl { get; set; }
     }
-    public class Author
+    public class Author : IDictionaries
     {
         public int Id { get; set; }
-       // [MaxLength(200)]
+        // [MaxLength(200)]
         public string name { get; set; }
     }
-    public class Language
+    public class Language : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(100)]
         public string name { get; set; }
     }
-    public class Sales_note
+    public class Sales_note : IDictionaries
     {
         public int Id { get; set; }
-       // [MaxLength(500)]
+        // [MaxLength(500)]
         public string name { get; set; }
     }
-    public class Publisher
+    public class Publisher : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(200)]
         public string name { get; set; }
     }
-    public class Series
+    public class Series : IDictionaries
     {
         public int Id { get; set; }
         //[MaxLength(200)]
         public string name { get; set; }
+    }
+    public interface IDictionaries
+    {
+        int Id { get; set; }
+        string name { get; set; }
     }
 }

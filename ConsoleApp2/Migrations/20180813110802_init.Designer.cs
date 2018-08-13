@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleApp2.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20180803132233_init")]
+    [Migration("20180813110802_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("authorId");
+                    b.Property<int>("AuthorId");
 
                     b.Property<bool>("available");
 
@@ -98,8 +98,6 @@ namespace ConsoleApp2.Migrations
                     b.Property<string>("year");
 
                     b.HasKey("id");
-
-                    b.HasIndex("authorId");
 
                     b.HasIndex("languageId");
 
@@ -204,10 +202,6 @@ namespace ConsoleApp2.Migrations
 
             modelBuilder.Entity("ConsoleApp2.Book", b =>
                 {
-                    b.HasOne("ConsoleApp2.Author", "author")
-                        .WithMany()
-                        .HasForeignKey("authorId");
-
                     b.HasOne("ConsoleApp2.Language", "language")
                         .WithMany()
                         .HasForeignKey("languageId");
