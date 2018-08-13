@@ -25,7 +25,8 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name");
+                    b.Property<string>("name")
+                        .HasMaxLength(500);
 
                     b.HasKey("Id");
 
@@ -38,33 +39,34 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AuthorId");
-
-                    b.Property<int?>("Sales_noteId");
+                    b.Property<int?>("AuthorId");
 
                     b.Property<bool>("available");
 
                     b.Property<decimal>("barcode")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
-                    b.Property<string>("binding");
+                    b.Property<string>("binding")
+                        .HasMaxLength(20);
 
                     b.Property<int>("categoryId");
 
-                    b.Property<string>("currencyId");
+                    b.Property<string>("currencyId")
+                        .HasMaxLength(10);
 
                     b.Property<bool>("delivery");
 
                     b.Property<string>("description");
 
                     b.Property<string>("dimensions")
-                        .HasMaxLength(70);
+                        .HasMaxLength(40);
 
                     b.Property<int>("group_id");
 
-                    b.Property<string>("iSBN");
+                    b.Property<string>("iSBN")
+                        .HasMaxLength(200);
 
-                    b.Property<int>("languageId");
+                    b.Property<int?>("languageId");
 
                     b.Property<long>("local_delivery_cost");
 
@@ -74,38 +76,41 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<double>("oldprice");
 
-                    b.Property<string>("page_extent");
+                    b.Property<string>("page_extent")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("pickup");
 
                     b.Property<double>("price");
 
-                    b.Property<int>("publisherId");
+                    b.Property<int?>("publisherId");
 
-                    b.Property<int>("sales_notesId");
+                    b.Property<int?>("sales_notesId");
 
-                    b.Property<int>("seriesId");
+                    b.Property<int?>("seriesId");
 
                     b.Property<bool>("store");
 
                     b.Property<string>("type")
-                        .HasMaxLength(70);
+                        .HasMaxLength(10);
 
-                    b.Property<string>("url");
+                    b.Property<string>("url")
+                        .HasMaxLength(100);
 
                     b.Property<decimal>("weight");
 
-                    b.Property<string>("year");
+                    b.Property<string>("year")
+                        .HasMaxLength(10);
 
                     b.HasKey("id");
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("Sales_noteId");
-
                     b.HasIndex("languageId");
 
                     b.HasIndex("publisherId");
+
+                    b.HasIndex("sales_notesId");
 
                     b.HasIndex("seriesId");
 
@@ -118,7 +123,8 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name");
+                    b.Property<string>("name")
+                        .HasMaxLength(20);
 
                     b.HasKey("Id");
 
@@ -133,9 +139,11 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<int?>("Bookid");
 
-                    b.Property<string>("paramName");
+                    b.Property<string>("paramName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("paramUnit");
+                    b.Property<string>("paramUnit")
+                        .HasMaxLength(10);
 
                     b.Property<string>("paramValue");
 
@@ -154,7 +162,8 @@ namespace ConsoleApp2.Migrations
 
                     b.Property<int?>("Bookid");
 
-                    b.Property<string>("pictureUrl");
+                    b.Property<string>("pictureUrl")
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -169,7 +178,8 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name");
+                    b.Property<string>("name")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -182,7 +192,8 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name");
+                    b.Property<string>("name")
+                        .HasMaxLength(300);
 
                     b.HasKey("Id");
 
@@ -195,7 +206,8 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name");
+                    b.Property<string>("name")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -204,29 +216,25 @@ namespace ConsoleApp2.Migrations
 
             modelBuilder.Entity("ConsoleApp2.Book", b =>
                 {
-                    b.HasOne("ConsoleApp2.Author")
+                    b.HasOne("ConsoleApp2.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
 
-                    b.HasOne("ConsoleApp2.Sales_note")
+                    b.HasOne("ConsoleApp2.Language", "language")
                         .WithMany("Books")
-                        .HasForeignKey("Sales_noteId");
+                        .HasForeignKey("languageId");
 
-                    b.HasOne("ConsoleApp2.Language")
+                    b.HasOne("ConsoleApp2.Publisher", "publisher")
                         .WithMany("Books")
-                        .HasForeignKey("languageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("publisherId");
 
-                    b.HasOne("ConsoleApp2.Publisher")
+                    b.HasOne("ConsoleApp2.Sales_note", "sales_notes")
                         .WithMany("Books")
-                        .HasForeignKey("publisherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("sales_notesId");
 
-                    b.HasOne("ConsoleApp2.Series")
+                    b.HasOne("ConsoleApp2.Series", "series")
                         .WithMany("Books")
-                        .HasForeignKey("seriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("seriesId");
                 });
 
             modelBuilder.Entity("ConsoleApp2.Param", b =>

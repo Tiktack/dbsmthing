@@ -13,7 +13,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true)
+                    name = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true)
+                    name = table.Column<string>(maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true)
+                    name = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,7 +52,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true)
+                    name = table.Column<string>(maxLength: 300, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -65,7 +65,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true)
+                    name = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -78,34 +78,33 @@ namespace ConsoleApp2.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    url = table.Column<string>(nullable: true),
+                    url = table.Column<string>(maxLength: 100, nullable: true),
                     price = table.Column<double>(nullable: false),
                     oldprice = table.Column<double>(nullable: false),
-                    currencyId = table.Column<string>(nullable: true),
+                    currencyId = table.Column<string>(maxLength: 10, nullable: true),
                     categoryId = table.Column<int>(nullable: false),
                     store = table.Column<bool>(nullable: false),
                     pickup = table.Column<bool>(nullable: false),
                     delivery = table.Column<bool>(nullable: false),
                     local_delivery_cost = table.Column<long>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<int>(nullable: true),
                     name = table.Column<string>(nullable: true),
-                    publisherId = table.Column<int>(nullable: false),
-                    seriesId = table.Column<int>(nullable: false),
-                    year = table.Column<string>(nullable: true),
-                    iSBN = table.Column<string>(nullable: true),
-                    languageId = table.Column<int>(nullable: false),
-                    binding = table.Column<string>(nullable: true),
-                    page_extent = table.Column<string>(nullable: true),
+                    publisherId = table.Column<int>(nullable: true),
+                    seriesId = table.Column<int>(nullable: true),
+                    year = table.Column<string>(maxLength: 10, nullable: true),
+                    iSBN = table.Column<string>(maxLength: 200, nullable: true),
+                    languageId = table.Column<int>(nullable: true),
+                    binding = table.Column<string>(maxLength: 20, nullable: true),
+                    page_extent = table.Column<string>(maxLength: 100, nullable: true),
                     description = table.Column<string>(nullable: true),
-                    sales_notesId = table.Column<int>(nullable: false),
+                    sales_notesId = table.Column<int>(nullable: true),
                     manufacturer_warranty = table.Column<bool>(nullable: false),
                     barcode = table.Column<decimal>(nullable: false),
                     weight = table.Column<decimal>(nullable: false),
-                    dimensions = table.Column<string>(maxLength: 70, nullable: true),
+                    dimensions = table.Column<string>(maxLength: 40, nullable: true),
                     available = table.Column<bool>(nullable: false),
-                    type = table.Column<string>(maxLength: 70, nullable: true),
-                    group_id = table.Column<int>(nullable: false),
-                    Sales_noteId = table.Column<int>(nullable: true)
+                    type = table.Column<string>(maxLength: 10, nullable: true),
+                    group_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,31 +114,31 @@ namespace ConsoleApp2.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Books_Sales_Notes_Sales_noteId",
-                        column: x => x.Sales_noteId,
-                        principalTable: "Sales_Notes",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Languages_languageId",
                         column: x => x.languageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Publishers_publisherId",
                         column: x => x.publisherId,
                         principalTable: "Publishers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Books_Sales_Notes_sales_notesId",
+                        column: x => x.sales_notesId,
+                        principalTable: "Sales_Notes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Series_seriesId",
                         column: x => x.seriesId,
                         principalTable: "Series",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,8 +147,8 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    paramName = table.Column<string>(nullable: true),
-                    paramUnit = table.Column<string>(nullable: true),
+                    paramName = table.Column<string>(maxLength: 50, nullable: true),
+                    paramUnit = table.Column<string>(maxLength: 10, nullable: true),
                     paramValue = table.Column<string>(nullable: true),
                     Bookid = table.Column<int>(nullable: true)
                 },
@@ -170,7 +169,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    pictureUrl = table.Column<string>(nullable: true),
+                    pictureUrl = table.Column<string>(maxLength: 100, nullable: true),
                     Bookid = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -190,11 +189,6 @@ namespace ConsoleApp2.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Sales_noteId",
-                table: "Books",
-                column: "Sales_noteId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_languageId",
                 table: "Books",
                 column: "languageId");
@@ -203,6 +197,11 @@ namespace ConsoleApp2.Migrations
                 name: "IX_Books_publisherId",
                 table: "Books",
                 column: "publisherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_sales_notesId",
+                table: "Books",
+                column: "sales_notesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_seriesId",
@@ -235,13 +234,13 @@ namespace ConsoleApp2.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Sales_Notes");
-
-            migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "Publishers");
+
+            migrationBuilder.DropTable(
+                name: "Sales_Notes");
 
             migrationBuilder.DropTable(
                 name: "Series");
