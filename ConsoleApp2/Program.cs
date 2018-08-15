@@ -12,12 +12,12 @@ namespace ConsoleApp2
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            using (BookContext context = new BookContext())
+            using (var context = new BookContext())
             {
                 //checkLength();
 
                 //Get all data
-                var data = Logic.getData();
+                var data = Logic.GetData();
 
                 //Add dependent tables to context
                 context.AddRange(Logic.GetAuthors(data));
@@ -35,29 +35,20 @@ namespace ConsoleApp2
 
 
                 //Creating BookAuthor table and save to db
-                foreach (var item in context.Books)
-                {
-                    var temp = data.offer.FirstOrDefault(y => y.name == item.name);
-                    item.BookAuthors = (temp.author != null ?
-                        temp.author.Split(',')
-                            .Distinct()
-                            .Select(x => new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == x) })
-                            .ToList() 
-                        : new List<BookAuthor> { new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == "null") } });
-
-                }
-                data = null;
+                Logic.BookAuthorRelationship(context, data);
                 context.SaveChanges();
             }
             stopWatch.Stop();
             Debug.WriteLine(stopWatch.ElapsedMilliseconds);
         }
 
+        
+
 
         //Method to check legth every string field
         public static void checkLength()
         {
-            var getbooks = Logic.getData();
+            var getbooks = Logic.GetData();
             var maxAuthor = getbooks.offer.Max(x => x.author?.Length);
             var url = getbooks.offer.Max(x => x.url?.Length);
             var currencyId = getbooks.offer.Max(x => x.currencyId?.Length);

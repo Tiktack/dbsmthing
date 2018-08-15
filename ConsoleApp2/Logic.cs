@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,7 +9,7 @@ namespace ConsoleApp2
 {
     public static class Logic
     {
-        public static offers getData(string path = @"c:\Storage\1083.xml")
+        public static offers GetData(string path = @"c:\Storage\1083.xml")
         {
 
             var reader = new StreamReader(path);
@@ -29,7 +27,7 @@ namespace ConsoleApp2
         public static IEnumerable<Author> GetAuthors(offers offers)
         {
             return offers.offer.Select(x => new Author { name = x.author })
-                .SelectMany(x => x.name != null ? x.name.Split(',') : new string[] { "null" }).Distinct()
+                .SelectMany(x => x.name != null ? x.name.Split(',') : new[] { "null" }).Distinct()
                 .Select(x => new Author { name = x });
         }
         public static IEnumerable<Language> GetLanguages(offers offers)
@@ -85,6 +83,21 @@ namespace ConsoleApp2
                     _params = new List<Param>(x.param.Select(t => new Param { paramName = t.name, paramUnit = t.unit, paramValue = t.Value }))
                 };
             });
+        }
+
+        public static void BookAuthorRelationship(BookContext context, offers data)
+        {
+            foreach (var item in context.Books)
+            {
+                var temp = data.offer.FirstOrDefault(y => y.name == item.name);
+                item.BookAuthors = (temp?.author != null ?
+                    temp.author.Split(',')
+                        .Distinct()
+                        .Select(x => new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == x) })
+                        .ToList()
+                    : new List<BookAuthor> { new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == "null") } });
+
+            }
         }
     }
 
