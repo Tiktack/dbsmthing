@@ -19,12 +19,26 @@ namespace ConsoleApp2
         public DbSet<Series> Series { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MyDb;Trusted_Connection=True;");
+            optionsBuilder
+                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MyDb;Trusted_Connection=True;")
+                .EnableSensitiveDataLogging();
+
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookAuthor>()
                 .HasKey(t => new { t.BookId, t.AuthorId });
+
+            modelBuilder.Entity<BookAuthor>()
+                .HasOne(pc => pc.Book)
+                .WithMany(p => p.BookAuthors)
+                .HasForeignKey(pc => pc.BookId);
+
+            modelBuilder.Entity<BookAuthor>()
+                .HasOne(pc => pc.Author)
+                .WithMany(p => p.BookAuthors)
+                .HasForeignKey(pc => pc.AuthorId);
         }
     }
 
@@ -43,8 +57,6 @@ namespace ConsoleApp2
 
         public int categoryId { get; set; }
 
-        public ICollection<Picture> picture { get; set; } = new List<Picture>();
-
         public bool store { get; set; }
 
         public bool pickup { get; set; }
@@ -53,19 +65,15 @@ namespace ConsoleApp2
 
         public uint local_delivery_cost { get; set; }
 
-        public ICollection<BookAuthor> BookAuthors { get; set; }
-
-        //public Author Author { get; set; }
-
         public string name { get; set; }
 
         public Publisher publisher { get; set; }
 
         public Series series { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(20)]
         public string year { get; set; }
-        [MaxLength(200)]
+        [MaxLength(300)]
         public string iSBN { get; set; }
 
         public Language language { get; set; }
@@ -88,11 +96,13 @@ namespace ConsoleApp2
         public string dimensions { get; set; }
 
         public bool available { get; set; }
-        [MaxLength(10)]
+        [MaxLength(20)]
         public string type { get; set; }
 
         public int group_id { get; set; }
 
+        public ICollection<Picture> picture { get; set; } = new List<Picture>();
+        public ICollection<BookAuthor> BookAuthors { get; set; }
         public ICollection<Param> _params { get; set; }
     }
 
@@ -115,14 +125,13 @@ namespace ConsoleApp2
     public class Author : IDictionaries
     {
         public int Id { get; set; }
-        [MaxLength(500)]
         public string name { get; set; }
         public ICollection<BookAuthor> BookAuthors { get; set; }
     }
     public class Language : IDictionaries
     {
         public int Id { get; set; }
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string name { get; set; }
         public ICollection<Book> Books { get; set; }
     }
@@ -136,7 +145,7 @@ namespace ConsoleApp2
     public class Publisher : IDictionaries
     {
         public int Id { get; set; }
-        [MaxLength(200)]
+        [MaxLength(300)]
         public string name { get; set; }
         public ICollection<Book> Books { get; set; }
     }

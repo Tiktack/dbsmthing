@@ -14,28 +14,50 @@ namespace ConsoleApp2
             stopWatch.Start();
             using (BookContext context = new BookContext())
             {
-                var getbooks = Logic.getBooks();
+                //checkLength();
 
-                context.AddRange(Logic.GetAuthors(getbooks));
-                context.AddRange(Logic.GetLanguages(getbooks));
-                context.AddRange(Logic.GetSales_note(getbooks));
-                context.AddRange(Logic.GetPublishers(getbooks));
-                context.AddRange(Logic.GetSeries(getbooks));
+                //Get all data
+                var data = Logic.getData();
+
+                //Add dependent tables to context
+                context.AddRange(Logic.GetAuthors(data));
+                context.AddRange(Logic.GetLanguages(data));
+                context.AddRange(Logic.GetSales_note(data));
+                context.AddRange(Logic.GetPublishers(data));
+                context.AddRange(Logic.GetSeries(data));
                 //save dictionaries to db
                 context.SaveChanges();
-                //create books for context
-                var converted = Logic.ConvertOffersToBooks(getbooks, context);
-                getbooks = null;
+
+                //create books for context and save to db
+                var converted = Logic.ConvertOffersToBooks(data, context);
                 context.AddRange(converted);
-                //save books to db
+                context.SaveChanges();
+
+
+                //Creating BookAuthor table and save to db
+                foreach (var item in context.Books)
+                {
+                    var temp = data.offer.FirstOrDefault(y => y.name == item.name);
+                    item.BookAuthors = (temp.author != null ?
+                        temp.author.Split(',')
+                            .Distinct()
+                            .Select(x => new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == x) })
+                            .ToList() 
+                        : new List<BookAuthor> { new BookAuthor { Author = context.Authors.FirstOrDefault(y => y.name == "null") } });
+
+                }
+                data = null;
                 context.SaveChanges();
             }
             stopWatch.Stop();
             Debug.WriteLine(stopWatch.ElapsedMilliseconds);
         }
-        public void checkLength()
+
+
+        //Method to check legth every string field
+        public static void checkLength()
         {
-            var getbooks = Logic.getBooks();
+            var getbooks = Logic.getData();
             var maxAuthor = getbooks.offer.Max(x => x.author?.Length);
             var url = getbooks.offer.Max(x => x.url?.Length);
             var currencyId = getbooks.offer.Max(x => x.currencyId?.Length);

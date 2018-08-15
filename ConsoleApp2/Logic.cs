@@ -11,7 +11,7 @@ namespace ConsoleApp2
 {
     public static class Logic
     {
-        public static offers getBooks(string path = @"c:\Storage\1.xml")
+        public static offers getData(string path = @"c:\Storage\1083.xml")
         {
 
             var reader = new StreamReader(path);
@@ -28,8 +28,9 @@ namespace ConsoleApp2
         //}
         public static IEnumerable<Author> GetAuthors(offers offers)
         {
-            var lol = offers.offer.Select(x => x.author).Distinct().Select(x => new Author { name = x });
-            return lol.SelectMany(x => x.name?.Split(',')).Select(x => new Author { name = x });
+            return offers.offer.Select(x => new Author { name = x.author })
+                .SelectMany(x => x.name != null ? x.name.Split(',') : new string[] { "null" }).Distinct()
+                .Select(x => new Author { name = x });
         }
         public static IEnumerable<Language> GetLanguages(offers offers)
         {
@@ -50,8 +51,7 @@ namespace ConsoleApp2
 
         public static IEnumerable<Book> ConvertOffersToBooks(offers offers, BookContext context)
         {
-            const char cos = ',';
-            var result = offers.offer.Select(x =>
+            return offers.offer.Select(x =>
             {
                 return new Book
                 {
@@ -65,11 +65,6 @@ namespace ConsoleApp2
                     pickup = x.pickup,
                     delivery = x.delivery,
                     local_delivery_cost = x.local_delivery_cost,
-                    //Author = context.Authors.FirstOrDefault(t => t.name == x.author),
-                    BookAuthors = x.author.Split(cos)
-                                    .Select(t => new BookAuthor
-                                        { Author = context.Authors.FirstOrDefault(y => y.name == t) })
-                                    .ToList(),
                     name = x.name,
                     publisher = context.Publishers.FirstOrDefault(t => t.name == x.publisher),
                     series = context.Series.FirstOrDefault(t => t.name == x.series),
@@ -90,11 +85,10 @@ namespace ConsoleApp2
                     _params = new List<Param>(x.param.Select(t => new Param { paramName = t.name, paramUnit = t.unit, paramValue = t.Value }))
                 };
             });
-            return result;
         }
     }
 
-
+    #region Serealization class
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
@@ -709,6 +703,6 @@ namespace ConsoleApp2
             }
         }
     }
-
+    #endregion
 
 }

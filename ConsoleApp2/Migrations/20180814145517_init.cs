@@ -13,7 +13,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(maxLength: 500, nullable: true)
+                    name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(maxLength: 20, nullable: true)
+                    name = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,7 @@ namespace ConsoleApp2.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(maxLength: 200, nullable: true)
+                    name = table.Column<string>(maxLength: 300, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,8 +90,8 @@ namespace ConsoleApp2.Migrations
                     name = table.Column<string>(nullable: true),
                     publisherId = table.Column<int>(nullable: true),
                     seriesId = table.Column<int>(nullable: true),
-                    year = table.Column<string>(maxLength: 10, nullable: true),
-                    iSBN = table.Column<string>(maxLength: 200, nullable: true),
+                    year = table.Column<string>(maxLength: 20, nullable: true),
+                    iSBN = table.Column<string>(maxLength: 300, nullable: true),
                     languageId = table.Column<int>(nullable: true),
                     binding = table.Column<string>(maxLength: 20, nullable: true),
                     page_extent = table.Column<string>(maxLength: 100, nullable: true),
@@ -102,7 +102,7 @@ namespace ConsoleApp2.Migrations
                     weight = table.Column<decimal>(nullable: false),
                     dimensions = table.Column<string>(maxLength: 40, nullable: true),
                     available = table.Column<bool>(nullable: false),
-                    type = table.Column<string>(maxLength: 10, nullable: true),
+                    type = table.Column<string>(maxLength: 20, nullable: true),
                     group_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

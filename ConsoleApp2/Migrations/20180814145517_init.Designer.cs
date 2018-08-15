@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsoleApp2.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20180813161922_init")]
+    [Migration("20180814145517_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,7 @@ namespace ConsoleApp2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name")
-                        .HasMaxLength(500);
+                    b.Property<string>("name");
 
                     b.HasKey("Id");
 
@@ -64,7 +63,7 @@ namespace ConsoleApp2.Migrations
                     b.Property<int>("group_id");
 
                     b.Property<string>("iSBN")
-                        .HasMaxLength(200);
+                        .HasMaxLength(300);
 
                     b.Property<int?>("languageId");
 
@@ -92,7 +91,7 @@ namespace ConsoleApp2.Migrations
                     b.Property<bool>("store");
 
                     b.Property<string>("type")
-                        .HasMaxLength(10);
+                        .HasMaxLength(20);
 
                     b.Property<string>("url")
                         .HasMaxLength(100);
@@ -100,7 +99,7 @@ namespace ConsoleApp2.Migrations
                     b.Property<decimal>("weight");
 
                     b.Property<string>("year")
-                        .HasMaxLength(10);
+                        .HasMaxLength(20);
 
                     b.HasKey("id");
 
@@ -135,7 +134,7 @@ namespace ConsoleApp2.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("name")
-                        .HasMaxLength(20);
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -190,7 +189,7 @@ namespace ConsoleApp2.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("name")
-                        .HasMaxLength(200);
+                        .HasMaxLength(300);
 
                     b.HasKey("Id");
 
